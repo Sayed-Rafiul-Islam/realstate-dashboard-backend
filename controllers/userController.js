@@ -11,17 +11,16 @@ const login = async (req,res) => {
         const currentDate = new Date()
 
         const isUser = await User.findOne({ user_name})
-        // console.log(isAdmin)
         if (!isUser) {
-            res.status(404).send({message : "No account with this email"})
+            res.status(404).send({message : "No account with this user name"})
         } else {
             bcrypt.compare(password,isUser.pass_word,async (err,result)=>{
                 if (result) {
                     const data = {user_name, role : isUser.role, date : currentDate}
                     const token = await createJwt(data)
-                    res.status(200).send({accessToken : token,role : isUser.role, user_name})
+                    res.status(200).json({accessToken : token,role : isUser.role, user_name})
                 } else {
-                    res.status(400).send({message : "Password did not match"})
+                    res.status(400).json({message : "Password did not match"})
                 }
 
             })
@@ -30,7 +29,7 @@ const login = async (req,res) => {
         
     } catch (error) {
         console.log(error)
-        res.status(500).send(error)
+        res.status(500).json({messgae : "something went wrong"})
     }
 }
 

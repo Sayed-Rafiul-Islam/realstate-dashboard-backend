@@ -25,7 +25,7 @@ const userAuthViaToken = async (req, res, next) => {
     
   } catch (error) {
     console.log(error)
-    res.status(201).send({message : "Forbidden Access"});
+    res.status(500).send({message : "Forbidden Access"});
   }
 };
 
