@@ -61,6 +61,35 @@ const createUser = async (req,res) => {
 }
 
 
+const updateUser = async (req,res) => {
+    try {
+        const {email, firstName, lastName,contactNo,NID,birthDate,imageUrl,printName,printAddress,printContact,printLogo} = req.body;
+
+        await User.updateOne({
+                email,
+        }, {
+            firstName,
+            lastName,
+            contactNo,
+            NID,
+            birthDate,
+            imageUrl,
+            printName,
+            printAddress,
+            printContact,
+            printLogo
+        })
+
+        res.status(200).send('success')
+        
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).send(error)
+        }
+}
+
+
 // const getAdmins = async (req,res) => {
 //     try {
 //         const all = await Admin.find()
@@ -144,6 +173,7 @@ const createUser = async (req,res) => {
 module.exports = {
     createUser,
     login,
+    updateUser
     // getAdmins,
     // getAdmin,
     // deleteAdmin,

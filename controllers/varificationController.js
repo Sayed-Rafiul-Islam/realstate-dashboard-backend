@@ -1,8 +1,12 @@
+const User = require("../models/userModel")
+
 const varify = async (req,res) => {
     const email = req.user.email
-    const role = req.user.role
+
+    const user = await User.findOne({ email})
+    // console.log(user)
     
-    res.status(200).send({email,role})  
+    res.status(200).send(user)  
 
 }
 
