@@ -7,18 +7,18 @@ const bcrypt = require('bcrypt');
 
 const login = async (req,res) => {
     try {
-        const {user_name,password} = req.body
+        const {email,password} = req.body
         const currentDate = new Date()
 
-        const isUser = await User.findOne({ user_name})
+        const isUser = await User.findOne({ email})
         if (!isUser) {
             res.status(404).send({message : "No account with this user name"})
         } else {
             bcrypt.compare(password,isUser.pass_word,async (err,result)=>{
                 if (result) {
-                    const data = {user_name, role : isUser.role, date : currentDate}
+                    const data = {email, role : isUser.role, date : currentDate}
                     const token = await createJwt(data)
-                    res.status(200).json({accessToken : token,role : isUser.role, user_name})
+                    res.status(200).json({accessToken : token,role : isUser.role, email})
                 } else {
                     res.status(400).json({message : "Password did not match"})
                 }
@@ -38,16 +38,16 @@ const login = async (req,res) => {
 
 const createUser = async (req,res) => {
     try {
-        const {user_name,password,role} = req.body;
+        const {email,password,role} = req.body;
 
 
-        const data = {user_name, role, date : new Date()}
+        const data = {email, role, date : new Date()}
         const token = await createJwt(data)
 
 
         const pass_word = await encode(password)
             await User.create({
-                user_name,
+                email,
                 pass_word,
                 role
             })

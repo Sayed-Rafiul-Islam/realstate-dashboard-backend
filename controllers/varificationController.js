@@ -1,8 +1,8 @@
 const varify = async (req,res) => {
-    const user_name = req.user.user_name
+    const email = req.user.email
     const role = req.user.role
     
-    res.status(200).send({user_name,role})  
+    res.status(200).send({email,role})  
 
 }
 
