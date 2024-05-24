@@ -40,19 +40,32 @@ const createUser = async (req,res) => {
     try {
         const {email,password,role} = req.body;
 
+        const isUser = await User.findOne({ email})
+        if (isUser) {
+            res.status(400).send({message : "User already exists with this email"})
+        } else {
+            const data = {email, role, date : new Date()}
+            const token = await createJwt(data)
+            const pass_word = await encode(password)
+                await User.create({
+                    email,
+                    pass_word,
+                    role,
+                    firstName : '', 
+                    lastName : '',
+                    contactNo : '',
+                    NID : '',
+                    birthDate : '',
+                    imageUrl : '',
+                    printName : '',
+                    printAddress : '',
+                    printContact : '',
+                    printLogo : ''
 
-        const data = {email, role, date : new Date()}
-        const token = await createJwt(data)
+                })
+                res.status(200).send({accessToken : token})
+        }
 
-
-        const pass_word = await encode(password)
-            await User.create({
-                email,
-                pass_word,
-                role
-            })
-            res.status(200).send({accessToken : token})
-        
 
         } catch (error) {
             console.log(error)
