@@ -3,16 +3,16 @@ const MaintainanceRequest = require('../models/maintainanceRequestModel')
 
 const createRequest = async(req,res) => {
     try {
-        const {propertyId,unitId,type,details,status} = req.body
+        const {propertyId,unitId,type,details,status,requestNo,attachment} = req.body
         const newData = {
             propertyId,
             unitId,
             type,
             details,
             status,
-            attachment : req.file ? req.file.filename : '',
+            attachment,
             date : new Date(),
-            requestNo : '',
+            requestNo,
             maintainerId : '',
             issue : '',
             cost : 0
@@ -27,37 +27,20 @@ const createRequest = async(req,res) => {
 
 const updateRequest = async(req,res) => {
     try {
-        const {propertyId,unitId,type,details,status,_id} = req.body
-
-        if (req.file) {
+        const {propertyId,unitId,type,details,status,_id,attachment} = req.body
             const updatedData = {
                 propertyId,
                 unitId,
                 type,
                 details,
                 status,
-                attachment : req.file.filename,
+                attachment,
             }
             await MaintainanceRequest.updateOne({_id}, updatedData)
 
             const updatedRequest = await MaintainanceRequest.findOne({_id})
 
         res.status(200).send(updatedRequest)
-        } else {
-            const updatedData = {
-                propertyId,
-                unitId,
-                type,
-                details,
-                status,
-            }
-            await MaintainanceRequest.updateOne({_id}, updatedData)
-
-            const updatedRequest = await MaintainanceRequest.findOne({_id})
-
-        res.status(200).send(updatedRequest)
-        }
-        
         
         // const newRequest = await MaintainanceRequest.create(newData)
         // res.status(200).send('hi')
