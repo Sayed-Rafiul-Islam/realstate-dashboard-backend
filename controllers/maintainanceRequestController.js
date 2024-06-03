@@ -1,4 +1,5 @@
 const MaintainanceRequest = require('../models/maintainanceRequestModel')
+const Notification = require('../models/notificaionModel')
 
 
 const createRequest = async(req,res) => {
@@ -18,7 +19,19 @@ const createRequest = async(req,res) => {
             cost : 0
         }
         const newRequest = await MaintainanceRequest.create(newData)
-        res.status(200).send(newRequest)
+
+        // notification 
+        const notification = {
+            propertyId,
+            unitId,
+            issue : 'Maintainance Issue',
+            body : details,
+            date : new Date().toISOString()
+        }
+        const newNotification = await Notification.create(notification)
+
+
+        res.status(200).send({newRequest,newNotification})
     } catch (error) {
         console.log(error)
         res.status(500).send({error})
@@ -42,8 +55,6 @@ const updateRequest = async(req,res) => {
 
         res.status(200).send(updatedRequest)
         
-        // const newRequest = await MaintainanceRequest.create(newData)
-        // res.status(200).send('hi')
     } catch (error) {
         console.log(error)
         res.status(500).send({error})

@@ -28,12 +28,14 @@ app.use("/files",express.static('files'))
 const userRouter = require('./routes/userRouter')
 const varificationRouter = require('./routes/varification')
 const maintainanceRequestRouter = require('./routes/maintainanceRequestRouter')
+const notificationsRouter = require('./routes/notificationsRouter')
 
 
 // Routes 
 app.use('/api', userRouter) 
 app.use('/api', varificationRouter) 
 app.use('/api', maintainanceRequestRouter) 
+app.use('/api', notificationsRouter) 
 
 const mongoose = require('mongoose');
 
