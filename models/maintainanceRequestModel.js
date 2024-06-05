@@ -19,6 +19,10 @@ const maintainanceRequestSchema = new Schema({
         type : String,
         required : true
     },
+    paymentStatus : {
+        type : String,
+        required : true
+    },
     details : {
         type : String,
         required : true

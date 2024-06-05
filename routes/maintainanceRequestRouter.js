@@ -19,7 +19,7 @@ const { createRequest, getRequests, updateRequest } = require('../controllers/ma
 // router.post('/createRequest',upload.single('file'), createRequest )
 // router.post('/updateRequest',upload.single('file'), updateRequest )
 router.post('/createRequest', createRequest )
-router.post('/updateRequest', updateRequest )
+router.patch('/updateRequest', updateRequest )
 router.get('/getRequests', getRequests )
 
 

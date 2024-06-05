@@ -4,13 +4,14 @@ const Notification = require('../models/notificaionModel')
 
 const createRequest = async(req,res) => {
     try {
-        const {propertyId,unitId,type,details,status,requestNo,attachment} = req.body
+        const {propertyId,unitId,type,details,status,requestNo,attachment,paymentStatus} = req.body
         const newData = {
             propertyId,
             unitId,
             type,
             details,
             status,
+            paymentStatus,
             attachment,
             date : new Date(),
             requestNo,
@@ -40,13 +41,14 @@ const createRequest = async(req,res) => {
 
 const updateRequest = async(req,res) => {
     try {
-        const {propertyId,unitId,type,details,status,_id,attachment} = req.body
+        const {propertyId,unitId,type,details,status,_id,attachment,paymentStatus} = req.body
             const updatedData = {
                 propertyId,
                 unitId,
                 type,
                 details,
                 status,
+                paymentStatus,
                 attachment,
             }
             await MaintainanceRequest.updateOne({_id}, updatedData)

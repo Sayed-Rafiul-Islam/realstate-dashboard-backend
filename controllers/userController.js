@@ -11,6 +11,7 @@ const login = async (req,res) => {
         const currentDate = new Date()
 
         const isUser = await User.findOne({ email})
+
         if (!isUser) {
             res.status(404).send({message : "No account with this user name"})
         } else {
