@@ -14,6 +14,7 @@ const createRequest = async(req,res) => {
             paymentStatus,
             attachment,
             date : new Date(),
+            responsibility : "Tenant",
             requestNo,
             maintainerId : '',
             issue : '',

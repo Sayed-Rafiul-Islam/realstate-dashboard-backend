@@ -29,9 +29,12 @@ const maintainanceRequestSchema = new Schema({
     },
     attachment : {
         type : String,
-        required : false
+        required : true
     },
-
+    responsibility : {
+        type : String,
+        required : true
+    },
     // -------------------------------------------
     // optional info
     date : {
