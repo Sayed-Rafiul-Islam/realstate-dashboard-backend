@@ -56,6 +56,10 @@ const maintainanceRequestSchema = new Schema({
     cost : {
         type : Number,
         required : false
+    },
+    invoiceId : {
+        type : String,
+        required : false
     }
 })
 
