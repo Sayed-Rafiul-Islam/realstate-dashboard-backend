@@ -1,4 +1,5 @@
 const User = require('../models/userModel')
+const Owner = require('../models/ownerModel')
 const { createJwt } = require('../utils/varifyJWT')
 const { encode } = require('../utils/cypher')
 const bcrypt = require('bcrypt');
@@ -48,7 +49,7 @@ const createUser = async (req,res) => {
             const data = {email, role, date : new Date()}
             const token = await createJwt(data)
             const pass_word = await encode(password)
-                await User.create({
+            const user = await User.create({
                     email,
                     pass_word,
                     role,
@@ -63,8 +64,15 @@ const createUser = async (req,res) => {
                     printContact : '',
                     printLogo : ''
 
+            })
+
+            if (user.role === 'owner') {
+                await Owner.create({
+                    user : user._id,
+                    status : false
                 })
-                res.status(200).send({accessToken : token})
+            }
+            res.status(200).send({accessToken : token})
         }
 
 
@@ -104,16 +112,15 @@ const updateUser = async (req,res) => {
 }
 
 
-// const getAdmins = async (req,res) => {
-//     try {
-//         const all = await Admin.find()
-//         const admins = all.filter(({role}) => role !== "supremeAdmin")
-//         res.status(200).send(admins)
-//         } catch (error) {
-//             console.log(error)
-//             res.status(500).send(error)
-//         }
-// }
+const getUsers = async (req,res) => {
+    try {
+        const all = await User.find()
+        res.status(200).send(all)
+        } catch (error) {
+            console.log(error)
+            res.status(500).send(error)
+        }
+}
 
 // const getAdmin = async (req,res) => {
 //     try {
@@ -187,7 +194,8 @@ const updateUser = async (req,res) => {
 module.exports = {
     createUser,
     login,
-    updateUser
+    updateUser,
+    getUsers
     // getAdmins,
     // getAdmin,
     // deleteAdmin,
