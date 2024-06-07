@@ -32,6 +32,7 @@ const notificationsRouter = require('./routes/notificationsRouter')
 const ownersRouter = require('./routes/ownerRouter')
 const packageRouter = require('./routes/packageRouter')
 const ownerPackagesRouter = require('./routes/ownerPackagesRouter')
+const ordersRouter = require('./routes/ordersRouter')
 
 
 // Routes 
@@ -42,6 +43,7 @@ app.use('/api', notificationsRouter)
 app.use('/api', ownersRouter) 
 app.use('/api', packageRouter)  
 app.use('/api', ownerPackagesRouter)  
+app.use('/api', ordersRouter)  
 
 const mongoose = require('mongoose');
 
@@ -61,34 +63,6 @@ mongoose.connect(uri, clientOptions)
     console.log(`Connected to Database and Listening to port ${port}`)
 }))
 .catch((err)=> console.log(err))
-
-
-// const multer  = require('multer')
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//       cb(null, './files')
-//     },
-//     filename: function (req, file, cb) {
-//       const uniqueSuffix = Date.now()
-//       cb(null,uniqueSuffix+file.originalname)
-//     }
-//   })
-  
-//   const upload = multer({ storage: storage })
-
-
-// app.post('/api/createRequests',upload.single('file'), async(req,res) => {
-//     try {
-//         console.log([req.file.filename,req.body])
-//         res.status(200).send({message : "success"})
-//     } catch (error) {
-//         console.log(error)
-//         res.status(500).send({error})
-//     }
-//   } )
-
-
-
 
 app.use('/', (req, res, next) => {
     res.send('running...')

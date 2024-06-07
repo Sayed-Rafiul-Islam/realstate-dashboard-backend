@@ -14,10 +14,22 @@ const getOwnerPackages = async(req,res) => {
         console.log(error)
         res.status(500).send({error})
     }
+}
+const assignOwnerPackage = async(req,res) => {
+    try {
+        const data = req.body
+        const newOwnerPackage = await OwnerPackage.create(data)
+
+        res.status(200).send(newOwnerPackage)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({error})
+    }
   }
 
 // export
 
 module.exports = {
-    getOwnerPackages
+    getOwnerPackages,
+    assignOwnerPackage
 }

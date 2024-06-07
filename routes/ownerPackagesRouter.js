@@ -1,8 +1,9 @@
-const { getOwnerPackages } = require('../controllers/ownerPackagesController')
+const { getOwnerPackages, assignOwnerPackage } = require('../controllers/ownerPackagesController')
 
 const router = require('express').Router()
 
 router.get('/getOwnerPackages', getOwnerPackages )
+router.post('/assignOwnerPackage', assignOwnerPackage )
 
 
 module.exports = router

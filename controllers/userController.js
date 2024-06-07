@@ -69,7 +69,9 @@ const createUser = async (req,res) => {
             if (user.role === 'owner') {
                 await Owner.create({
                     user : user._id,
-                    status : false
+                    status : false,
+                    propertyCount : 0,
+                    unitCount : 0
                 })
             }
             res.status(200).send({accessToken : token})
