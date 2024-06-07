@@ -31,6 +31,7 @@ const maintainanceRequestRouter = require('./routes/maintainanceRequestRouter')
 const notificationsRouter = require('./routes/notificationsRouter')
 const ownersRouter = require('./routes/ownerRouter')
 const packageRouter = require('./routes/packageRouter')
+const ownerPackagesRouter = require('./routes/ownerPackagesRouter')
 
 
 // Routes 
@@ -39,7 +40,8 @@ app.use('/api', varificationRouter)
 app.use('/api', maintainanceRequestRouter) 
 app.use('/api', notificationsRouter) 
 app.use('/api', ownersRouter) 
-app.use('/api', packageRouter) 
+app.use('/api', packageRouter)  
+app.use('/api', ownerPackagesRouter)  
 
 const mongoose = require('mongoose');
 
