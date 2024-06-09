@@ -1,4 +1,3 @@
-const Property = require('../models/propertyModel')
 const Unit = require('../models/unitModel')
 
 

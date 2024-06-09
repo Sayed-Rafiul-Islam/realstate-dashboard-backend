@@ -68,17 +68,5 @@ const Property = mongoose.model("Property", propertySchema)
 
 module.exports = Property
 
-// propertyName : z.string().min(1, {message : "Label Required"}),
-// unitCount : z.coerce.number().min(1, {message : "Unit Required"}),
-// description : z.string().min(1, {message : "Description Required"}),
-// image : z.string().min(1, {message : "Image Required"}),
-// address : z.string().min(1, {message : "Address Required"}),
-// city : z.string().min(1, {message : "City Required"}),
-// state : z.string().min(1, {message : "State Required"}),
-// country : z.string().min(1, {message : "Country Required"}),
-// postCode : z.string().min(1, {message : "Postal Code Required"})
-// rent : z.coerce.number().min(1),
-// deposit : z.coerce.number().min(1),
-// lateFee : z.coerce.number().min(1),
-// rentType : z.string().min(1)
+
 

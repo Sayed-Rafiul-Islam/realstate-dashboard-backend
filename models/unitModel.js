@@ -40,12 +40,7 @@ const unitSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: Property,
         required : true,
-    },
-    // tenant : {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: Tenant,
-    //     required : false,
-    // }
+    }
 })
 
 

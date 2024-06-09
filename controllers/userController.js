@@ -35,8 +35,7 @@ const login = async (req,res) => {
     }
 }
 
-// Create new Admin
-
+// Create new Admin and Owner
 
 const createUser = async (req,res) => {
     try {
@@ -84,10 +83,36 @@ const createUser = async (req,res) => {
         }
 }
 
+const createAccount = async (email,password,role) => {
+    const isUser = await User.findOne({ email})
+    if (isUser) {
+        return null
+    } else {
+        const pass_word = await encode(password)
+        const user = await User.create({
+                email,
+                pass_word,
+                role,
+                firstName : '', 
+                lastName : '',
+                contactNo : '',
+                NID : '',
+                birthDate : '',
+                imageUrl : '',
+                printName : '',
+                printAddress : '',
+                printContact : '',
+                printLogo : ''
+
+        })
+        return user
+    }
+}
+
 
 const updateUser = async (req,res) => {
     try {
-        const {email, firstName, lastName,contactNo,NID,birthDate,imageUrl,printName,printAddress,printContact,printLogo} = req.body;
+        const {email,firstName, lastName,contactNo,NID,birthDate,imageUrl,printName,printAddress,printContact,printLogo} = req.body;
 
         await User.updateOne({
                 email,
@@ -197,7 +222,8 @@ module.exports = {
     createUser,
     login,
     updateUser,
-    getUsers
+    getUsers,
+    createAccount
     // getAdmins,
     // getAdmin,
     // deleteAdmin,

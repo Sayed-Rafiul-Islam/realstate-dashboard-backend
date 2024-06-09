@@ -35,6 +35,7 @@ const ownerPackagesRouter = require('./routes/ownerPackagesRouter')
 const ordersRouter = require('./routes/ordersRouter')
 const propertyRouter = require('./routes/propertyRouter')
 const unitRouter = require('./routes/unitRouter')
+const tenantRouter = require('./routes/tenantRouter')
 
 
 // Routes 
@@ -48,6 +49,7 @@ app.use('/api', ownerPackagesRouter)
 app.use('/api', ordersRouter)  
 app.use('/api', propertyRouter)  
 app.use('/api', unitRouter)  
+app.use('/api', tenantRouter)  
 
 const mongoose = require('mongoose');
 
