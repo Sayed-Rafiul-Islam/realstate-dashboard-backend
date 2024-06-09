@@ -70,7 +70,9 @@ const getTenants = async(req,res) => {
 const deleteTenant = async(req,res) => {
     try {
         const _id = req.query.id
+        const {userId} = req.query
         await Tenant.deleteOne({_id})
+        await User.deleteOne({_id : userId})
         res.status(200).json({message : "Tenant removed."})
     } catch (error) {
         res.status(500).send(error)
