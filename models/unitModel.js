@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const Property = require('./propertyModel')
+const Owner = require("./ownerModel")
 
 const Schema = mongoose.Schema
 
@@ -39,6 +40,11 @@ const unitSchema = new Schema({
     property : {
         type: mongoose.Schema.Types.ObjectId,
         ref: Property,
+        required : true,
+    },
+    owner : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Owner,
         required : true,
     }
 })
