@@ -10,6 +10,46 @@ const maintainerSchema = new Schema({
         type: String,
         required : true
     },
+    status : {
+        type: String,
+        required : true,
+        default : "Available"
+    },
+    pendingRequest : {
+        type: Number,
+        required : true,
+        default : 0
+    },
+    age : {
+        type: Number,
+        required : false,
+        default : 20
+    },
+    address : {
+        type: String,
+        required : false,
+        default : ""
+    },
+    city : {
+        type: String,
+        required : false,
+        default : ""
+    },
+    state : {
+        type: String,
+        required : false,
+        default : ""
+    },
+    country : {
+        type: String,
+        required : false,
+        default : ""
+    },
+    postCode : {
+        type: String,
+        required : false,
+        default : ''
+    },
     type : {
         type: mongoose.Schema.Types.ObjectId,
         ref: MaintainanceType,

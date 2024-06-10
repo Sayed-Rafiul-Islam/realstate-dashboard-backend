@@ -66,6 +66,17 @@ const getTenants = async(req,res) => {
         res.status(500).send({error})
     }
   }
+  
+const getOwnerTenants = async(req,res) => {
+    try {
+        const owner = req.query.id
+        const tenants = await Tenant.find({owner}).populate(["property","unit","owner","user"])
+        res.status(200).send(tenants)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({error})
+    }
+  }
 
 const deleteTenant = async(req,res) => {
     try {
@@ -85,5 +96,6 @@ module.exports = {
     createTenant,
     getTenants,
     updateTenant,
-    deleteTenant
+    deleteTenant,
+    getOwnerTenants
 }
