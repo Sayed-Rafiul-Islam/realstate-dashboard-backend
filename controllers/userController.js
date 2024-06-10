@@ -84,7 +84,7 @@ const createUser = async (req,res) => {
 }
 
 const createAccount = async (email,password,role) => {
-    const isUser = await User.findOne({ email})
+    const isUser = await User.findOne({email})
     if (isUser) {
         return null
     } else {

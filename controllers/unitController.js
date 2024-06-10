@@ -1,5 +1,6 @@
 const Owner = require('../models/ownerModel')
 const Property = require('../models/propertyModel')
+const Tenant = require('../models/tenantModel')
 const Unit = require('../models/unitModel')
 
 
@@ -75,16 +76,24 @@ const getOwnerUnits = async(req,res) => {
         const _id = req.query.id
         const ownerId = req.query.ownerId
         const propertyId = req.query.propertyId
-        await Unit.deleteOne({_id})
-        await Owner.updateOne({_id : ownerId},{$inc : {unitCount : -1}})
-        await Property.updateOne({_id : propertyId},{$inc : {unitCount : -1}})
-        const updatedOwner = await Owner.findOne({_id : ownerId}).populate(["user","activePackage"])
-        const updatedProperty = await Property.findOne({_id : propertyId}).populate("owner")
-        res.status(200).json({updatedOwner,updatedProperty})
+    
+        const isTenant = await Tenant.findOne({unit : _id})
+
+        if (isTenant) {
+            res.status(400).json()
+        } else {
+            await Unit.deleteOne({_id})
+            await Owner.updateOne({_id : ownerId},{$inc : {unitCount : -1}})
+            await Property.updateOne({_id : propertyId},{$inc : {unitCount : -1}})
+            const updatedOwner = await Owner.findOne({_id : ownerId}).populate(["user","activePackage"])
+            const updatedProperty = await Property.findOne({_id : propertyId}).populate("owner")
+            res.status(200).json({updatedOwner,updatedProperty})
+        }
+        
     } catch (error) {
         res.status(500).send(error)
     }
-  }
+}
 
 // export
 

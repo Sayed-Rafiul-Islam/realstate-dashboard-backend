@@ -7,8 +7,8 @@ const addProperty = async(req,res) => {
     try {
         const property = req.body
         const newProperty = await Property.create(property)
-        await Owner.updateOne({_id : property.owner._id},{$inc : {propertyCount : 1}})
-        const updatedOwner = await Owner.findOne({_id : property.owner._id}).populate(["user","activePackage"])
+        await Owner.updateOne({_id : property.owner},{$inc : {propertyCount : +1}})
+        const updatedOwner = await Owner.findOne({_id : property.owner}).populate(["user","activePackage"])
         res.status(200).send({newProperty,updatedOwner})
     } catch (error) {
         console.log(error)
@@ -43,7 +43,6 @@ const getProperties = async(req,res) => {
 const getOwnerProperties = async(req,res) => {
     try {
         const _id = req.query.id
-        console.log(1)
         const properties = await Property.find({owner : _id}).populate("owner")
         res.status(200).send(properties)
     } catch (error) {

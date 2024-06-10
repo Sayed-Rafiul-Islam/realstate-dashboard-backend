@@ -36,6 +36,8 @@ const ordersRouter = require('./routes/ordersRouter')
 const propertyRouter = require('./routes/propertyRouter')
 const unitRouter = require('./routes/unitRouter')
 const tenantRouter = require('./routes/tenantRouter')
+const maintainanceTypeRouter = require('./routes/maintainanceTypeRouter')
+const maintainerRouter = require('./routes/maintainerRouter')
 
 
 // Routes 
@@ -50,6 +52,8 @@ app.use('/api', ordersRouter)
 app.use('/api', propertyRouter)  
 app.use('/api', unitRouter)  
 app.use('/api', tenantRouter)  
+app.use('/api', maintainanceTypeRouter)  
+app.use('/api', maintainerRouter)  
 
 const mongoose = require('mongoose');
 
