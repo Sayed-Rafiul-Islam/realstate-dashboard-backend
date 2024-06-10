@@ -1,5 +1,6 @@
 const MaintainanceRequest = require('../models/maintainanceRequestModel')
 const MaintainanceType = require('../models/maintainanceTypeModel')
+const Maintainer = require('../models/maintainerModel')
 
 
 const createMaintainanceType = async(req,res) => {
@@ -40,21 +41,14 @@ const getMaintainaceType = async(req,res) => {
 const deleteMaintainanceType = async(req,res) => {
     try {
         const _id = req.query.id
-        // const ownerId = req.query.ownerId
-        // const propertyId = req.query.propertyId
-    
-        // const isTenant = await Tenant.findOne({unit : _id})
+        const isMaintainer = await Maintainer.find({type : _id})
 
-        // if (isTenant) {
-        //     res.status(400).json()
-        // } else {
-        //     await Unit.deleteOne({_id})
-        //     await Owner.updateOne({_id : ownerId},{$inc : {unitCount : -1}})
-        //     await Property.updateOne({_id : propertyId},{$inc : {unitCount : -1}})
-        //     const updatedOwner = await Owner.findOne({_id : ownerId}).populate(["user","activePackage"])
-        //     const updatedProperty = await Property.findOne({_id : propertyId}).populate("owner")
-        //     res.status(200).json({updatedOwner,updatedProperty})
-        // }
+        if (isMaintainer.length === 0) {
+            await MaintainanceType.deleteOne({_id})
+            res.status(200).json()
+        } else {
+            res.status(400).json()
+        }
         
     } catch (error) {
         res.status(500).send(error)
