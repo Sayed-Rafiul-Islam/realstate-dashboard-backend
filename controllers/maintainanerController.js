@@ -44,10 +44,20 @@ const updateMaintainer = async(req,res) => {
     }
   }
 
-const getMaintainers = async(req,res) => {
+const getOwnerMaintainers = async(req,res) => {
     try {
         const owner = req.query.id
         const maintainers = await Maintainer.find({owner}).populate(["owner","user","type","property"])
+        res.status(200).send(maintainers)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({error})
+    }
+}
+
+const getMaintainers = async(req,res) => {
+    try {
+        const maintainers = await Maintainer.find().populate(["owner","user","type","property"])
         res.status(200).send(maintainers)
     } catch (error) {
         console.log(error)
@@ -71,6 +81,7 @@ const deleteMaintainer = async(req,res) => {
 
 module.exports = {
     createMaintainer,
+    getOwnerMaintainers,
     getMaintainers,
     updateMaintainer,
     deleteMaintainer

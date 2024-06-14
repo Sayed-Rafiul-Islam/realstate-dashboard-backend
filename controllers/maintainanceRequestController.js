@@ -1,4 +1,5 @@
 const MaintainanceRequest = require('../models/maintainanceRequestModel')
+const Maintainer = require('../models/maintainerModel')
 const Notification = require('../models/notificaionModel')
 const Property = require('../models/propertyModel')
 const Unit = require('../models/unitModel')
@@ -57,6 +58,29 @@ const getOwnerRequests = async(req,res) => {
     }
 }
 
+const getMaintainerRequests = async(req,res) => {
+    try {
+        const maintainer = req.query.maintainerId
+        const requests = await MaintainanceRequest.find({maintainer}).populate(["property","unit","type","maintainer","owner"])
+        res.status(200).send(requests)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({error})
+    }
+}
+
+const getTenantRequests = async(req,res) => {
+    try {
+        const property = req.query.propertyId
+        const unit = req.query.unitId
+        const requests = await MaintainanceRequest.find({property,unit}).populate(["property","unit","type","maintainer","owner"])
+        res.status(200).send(requests)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({error})
+    }
+}
+
 const getRequests = async(req,res) => {
     try {
         const requests = await MaintainanceRequest.find().populate(["property","unit","type","maintainer","owner"])
@@ -84,5 +108,7 @@ module.exports = {
     updateRequest,
     getRequests,
     getOwnerRequests,
-    deleteRequest
+    deleteRequest,
+    getMaintainerRequests,
+    getTenantRequests
 }
