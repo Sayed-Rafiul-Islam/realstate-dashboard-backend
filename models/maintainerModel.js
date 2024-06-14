@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 const User = require('./userModel')
 const MaintainanceType = require("./maintainanceTypeModel")
 const Owner = require("./ownerModel")
+const Property = require("./propertyModel")
 
 const Schema = mongoose.Schema
 
@@ -64,7 +65,12 @@ const maintainerSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: User,
         required : true,
-    }
+    },
+    property : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Property,
+        required : true,
+    },
 })
 
 const Maintainer = mongoose.model("Maintainer", maintainerSchema)
