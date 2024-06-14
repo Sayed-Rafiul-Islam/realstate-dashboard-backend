@@ -53,6 +53,7 @@ const getOwnerRequests = async(req,res) => {
         const requests = await MaintainanceRequest.find({owner}).populate(["property","unit","type","maintainer","owner"])
         res.status(200).send(requests)
     } catch (error) {
+
         console.log(error)
         res.status(500).send({error})
     }
@@ -64,6 +65,7 @@ const getMaintainerRequests = async(req,res) => {
         const requests = await MaintainanceRequest.find({maintainer}).populate(["property","unit","type","maintainer","owner"])
         res.status(200).send(requests)
     } catch (error) {
+        console.log("here")
         console.log(error)
         res.status(500).send({error})
     }
