@@ -6,8 +6,17 @@ const Unit = require('../models/unitModel')
 
 const addUnit = async(req,res) => {
     try {
-        const unit = req.body
-        const newUnit = await Unit.create(unit)
+        const data = req.body
+        const unit = await Unit.create(data)
+        const newUnit = await Unit.findOne({_id : unit._id}).populate([{
+            path : "property",
+            populate : {
+                path : "owner",
+                populate : {
+                    path : "user"
+                }
+            }
+        },"owner"])
         const property = await Property.findOne({_id : unit.property})
         const owner = await Owner.findOne({_id : property.owner})
         await Owner.updateOne({_id : owner._id},{$inc : {unitCount : 1}})
@@ -23,8 +32,17 @@ const addUnit = async(req,res) => {
 const updateUnit = async(req,res) => {
     try {
         const {_id,...rest} = req.body
+       
         await Unit.updateOne({_id}, rest)
-        const updatedUnit = await Unit.findOne({_id})
+        const updatedUnit = await Unit.findOne({_id}).populate([{
+            path : "property",
+            populate : {
+                path : "owner",
+                populate : {
+                    path : "user"
+                }
+            }
+        },"owner"])
         res.status(200).send(updatedUnit)
         
     } catch (error) {

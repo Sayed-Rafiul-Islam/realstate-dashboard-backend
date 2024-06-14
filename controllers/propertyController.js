@@ -1,5 +1,6 @@
 const Owner = require('../models/ownerModel')
 const Property = require('../models/propertyModel')
+const Tenant = require('../models/tenantModel')
 const Unit = require('../models/unitModel')
 
 
@@ -55,13 +56,16 @@ const getOwnerProperties = async(req,res) => {
     try {
         const _id = req.query.id
         const ownerId = req.query.ownerId
-        const isUnit = await Unit.find({property : _id})
+        const isTenant = await Tenant.find({property : _id})
 
-        if (isUnit.length > 0) {
-            res.status(400).json({message : "units exist"})
+        if (isTenant.length > 0) {
+            res.status(400).json({message : "tenants exist"})
         } else {
+            const property = await Property.findOne({_id})
+            await Unit.deleteMany({property : _id})
             await Property.deleteOne({_id})
-            await Owner.updateOne({_id : ownerId},{$inc : {propertyCount : -1}})
+            const owner = await Owner.findOne({_id : ownerId}).populate(["user","activePackage"])
+            await Owner.updateOne({_id : ownerId},{$inc : {propertyCount : 1,unitCount :  property.unitCount}})
             const updatedOwner = await Owner.findOne({_id : ownerId}).populate(["user","activePackage"])
             res.status(200).json(updatedOwner)
         }

@@ -1,33 +1,25 @@
 const MaintainanceRequest = require('../models/maintainanceRequestModel')
 const Notification = require('../models/notificaionModel')
+const Property = require('../models/propertyModel')
+const Unit = require('../models/unitModel')
 
 
 const createRequest = async(req,res) => {
     try {
-        const {propertyId,unitId,type,details,status,requestNo,attachment,paymentStatus} = req.body
-        const newData = {
-            propertyId,
-            unitId,
-            type,
-            details,
-            status,
-            paymentStatus,
-            attachment,
-            date : new Date(),
-            responsibility : "Tenant",
-            requestNo,
-            maintainerId : '',
-            issue : '',
-            cost : 0
-        }
-        const newRequest = await MaintainanceRequest.create(newData)
+        const data = req.body
+        const property = await Property.findOne({_id : data.property})
+        const unit = await Unit.findOne({_id : data.unit})
+        const request = {...data,propertyName : property.name, unitName : unit.name}
+        const upload = await MaintainanceRequest.create(request)
+
+        const newRequest = await MaintainanceRequest.findOne({_id : upload._id}).populate(["property","unit","type","maintainer","owner"])
 
         // notification 
         const notification = {
-            propertyId,
-            unitId,
+            propertyId : data.property,
+            unitId : data.unit,
             issue : 'Maintainance Issue',
-            body : details,
+            body : data.details,
             date : new Date().toISOString()
         }
         const newNotification = await Notification.create(notification)
@@ -42,19 +34,9 @@ const createRequest = async(req,res) => {
 
 const updateRequest = async(req,res) => {
     try {
-        const {propertyId,unitId,type,details,status,_id,attachment,paymentStatus} = req.body
-            const updatedData = {
-                propertyId,
-                unitId,
-                type,
-                details,
-                status,
-                paymentStatus,
-                attachment,
-            }
-            await MaintainanceRequest.updateOne({_id}, updatedData)
-
-            const updatedRequest = await MaintainanceRequest.findOne({_id})
+        const {_id,...data} = req.body
+            await MaintainanceRequest.updateOne({_id}, data)
+            const updatedRequest = await MaintainanceRequest.findOne({_id}).populate(["property","unit","type","maintainer","owner"])
 
         res.status(200).send(updatedRequest)
         
@@ -64,20 +46,43 @@ const updateRequest = async(req,res) => {
     }
   }
 
-const getRequests = async(req,res) => {
+const getOwnerRequests = async(req,res) => {
     try {
-        const requests = await MaintainanceRequest.find()
+        const owner = req.query.ownerId
+        const requests = await MaintainanceRequest.find({owner}).populate(["property","unit","type","maintainer","owner"])
         res.status(200).send(requests)
     } catch (error) {
         console.log(error)
         res.status(500).send({error})
     }
-  }
+}
+
+const getRequests = async(req,res) => {
+    try {
+        const requests = await MaintainanceRequest.find().populate(["property","unit","type","maintainer","owner"])
+        res.status(200).send(requests)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({error})
+    }
+}
+
+const deleteRequest = async(req,res) => {
+    try {
+        const _id = req.query.id
+        await MaintainanceRequest.deleteOne({_id})
+        res.status(200).json()
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
 
 // export
 
 module.exports = {
     createRequest,
     updateRequest,
-    getRequests
+    getRequests,
+    getOwnerRequests,
+    deleteRequest
 }

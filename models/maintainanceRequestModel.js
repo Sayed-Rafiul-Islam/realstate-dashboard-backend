@@ -1,19 +1,40 @@
 const mongoose = require("mongoose")
+const Property = require('./propertyModel')
+const Unit = require('./unitModel')
+const Maintainer = require('./maintainerModel')
+const MaintainanceType = require('./maintainanceTypeModel')
+const Owner = require('./ownerModel')
 
 const Schema = mongoose.Schema
 
 const maintainanceRequestSchema = new Schema({
-    propertyId : {
-        type : String,
+    property : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Property,
         required : true
     },
-    unitId : {
-        type : String,
+    unit : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Unit,
+        required : true
+    },
+    owner : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Owner,
         required : true
     },
     type : {
-        type : String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: MaintainanceType,
         required : false
+    },
+    propertyName : {
+        type : String,
+        required : true
+    },
+    unitName : {
+        type : String,
+        required : true
     },
     status : {
         type : String,
@@ -21,7 +42,8 @@ const maintainanceRequestSchema = new Schema({
     },
     paymentStatus : {
         type : String,
-        required : true
+        required : true,
+        default : "Due"
     },
     details : {
         type : String,
@@ -31,33 +53,40 @@ const maintainanceRequestSchema = new Schema({
         type : String,
         required : true
     },
-    responsibility : {
-        type : String,
-        required : true
-    },
+    // responsibility : {
+    //     type : String,
+    //     required : true,
+    //     default : "Owner"
+    // },
     // -------------------------------------------
     // optional info
     date : {
         type : Date,
-        required : false
+        required : false,
+        default : new Date()
     },
     requestNo : {
         type : String,
         required : false
     },
-    maintainerId : {
-        type : String,
-        required : false
+    maintainer : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Maintainer,
+        required : false,
     },
     issue : {
         type : String,
-        required : false
+        required : false,
+        default : '',
     },
     cost : {
         type : Number,
-        required : false
+        required : false,
+        default : 0,
     },
-    invoiceId : {
+    invoice : {
+        // type: mongoose.Schema.Types.ObjectId,
+        // ref: Invoice,
         type : String,
         required : false
     }
