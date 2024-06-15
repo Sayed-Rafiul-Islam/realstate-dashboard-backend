@@ -41,6 +41,7 @@ const maintainerRouter = require('./routes/maintainerRouter')
 const expenseTypeRouter = require('./routes/expenseTypeRouter')
 const gatewayRouter = require('./routes/gatewayRouter')
 const invoiceTypeRouter = require('./routes/invoiceTypeRouter')
+const invoiceRouter = require('./routes/invoiceRouter')
 
 
 // Routes 
@@ -60,6 +61,7 @@ app.use('/api', maintainerRouter)
 app.use('/api', expenseTypeRouter)  
 app.use('/api', invoiceTypeRouter)  
 app.use('/api', gatewayRouter)  
+app.use('/api', invoiceRouter)  
 
 const mongoose = require('mongoose');
 
