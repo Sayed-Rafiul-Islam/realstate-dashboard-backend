@@ -41,8 +41,8 @@ const updateExpenseType = async(req,res) => {
 const getOwnerExpenseType = async(req,res) => {
     try {
         const owner = req.query.ownerId
-        const properties = await ExpenseType.find({owner}).populate("owner")
-        res.status(200).send(properties)
+        const types = await ExpenseType.find({owner}).populate("owner")
+        res.status(200).send(types)
     } catch (error) {
         console.log(error)
         res.status(500).send({error})
