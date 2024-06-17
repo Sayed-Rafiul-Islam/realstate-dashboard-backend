@@ -4,6 +4,7 @@ const Invoice = require('../models/invoiceModel')
 const Property = require('../models/propertyModel')
 const Unit = require('../models/unitModel')
 const Tenant = require('../models/tenantModel')
+const Rent = require('../models/rentModel')
 
 
 const createInvoice = async(req,res) => {
@@ -37,7 +38,32 @@ const createInvoice = async(req,res) => {
                         path : "user"
                     }
                 }])
-                res.status(200).send(newInvoice)
+
+                // rent ------------------------------
+
+                if (type.title === 'Rent') {
+                    const {dueDate,type,typeName,status,prefix,...rest} = data
+                    const rent = {...rest,tenantName : isTenant[0].name, tenant : isTenant[0]._id}
+                    const rentResult = await Rent.create(rent)
+                    const newRent = await Rent.findOne({_id : rentResult._id}).populate(["gateway","property","unit",{
+                        path : "tenant",
+                        populate : {
+                            path : "user"
+                        }
+                    },{
+                        path : "owner",
+                        populate : {
+                            path : "user"
+                        }
+                    }])
+
+
+                    res.status(201).send({newInvoice,newRent})
+                } else {
+                    res.status(200).send(newInvoice)
+                }
+
+                
             } else {
                 data.dateOfPayment = ''
                 data.gateway = null
@@ -65,6 +91,7 @@ const updateInvoice = async(req,res) => {
     try {
         const {_id,...body} = req.body
         const isTenant = await Tenant.find({property : body.property, unit : body.unit})
+        const isRent = await Rent.find({invoiceNo : body.invoiceNo})
         if (isTenant.length === 0) {
             res.status(404).send()
         } else {
@@ -92,7 +119,52 @@ const updateInvoice = async(req,res) => {
                         path : "user"
                     }
                 }])
-                res.status(200).send(updatedInvoice)
+
+                 // rent ------------------------------
+
+                 if (type.title === 'Rent') {
+                    const {dueDate,type,typeName,status,prefix,...rest} = data
+                    const rent = {...rest,tenantName : isTenant[0].name, tenant : isTenant[0]._id}
+                    // const rentResult = await Rent.create(rent)
+                    if (isRent.length > 0) {
+                        await Rent.updateOne({invoiceNo : rent.invoiceNo},rent)
+                        const updatedRent = await Rent.findOne({invoiceNo : rent.invoiceNo}).populate(["gateway","property","unit",{
+                            path : "tenant",
+                            populate : {
+                                path : "user"
+                            }
+                        },{
+                            path : "owner",
+                            populate : {
+                                path : "user"
+                            }
+                        }])
+                        res.status(201).send({updatedRent,updatedInvoice})
+                    } else {
+                        const rentResult = await Rent.create(rent)
+                        const newRent = await Rent.findOne({_id : rentResult._id}).populate(["gateway","property","unit",{
+                            path : "tenant",
+                            populate : {
+                                path : "user"
+                            }
+                        },{
+                            path : "owner",
+                            populate : {
+                                path : "user"
+                            }
+                        }])
+                        res.status(201).send({newRent,updatedInvoice})
+                    }
+                } else {
+                    if (isRent.length > 0) {
+                        await Rent.deleteOne({_id : isRent[0]._id})
+                        res.status(202).send({updatedInvoice,rent : isRent[0]})
+                    } else {
+                        res.status(200).send(updatedInvoice)
+                    }
+    
+                    
+                }
             } else {
                 data.dateOfPayment = ''
                 data.gateway = null
@@ -105,7 +177,15 @@ const updateInvoice = async(req,res) => {
                         path : "user"
                     }
                 }])
-                res.status(200).send(updatedInvoice)
+
+                if (isRent.length > 0) {
+                    await Rent.deleteOne({_id : isRent[0]._id})
+                    res.status(202).send({updatedInvoice,rent : isRent[0]})
+                } else {
+                    res.status(200).send(updatedInvoice)
+                }
+
+                
             }
         }
         
