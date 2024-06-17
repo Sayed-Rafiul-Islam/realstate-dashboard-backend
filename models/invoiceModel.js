@@ -37,6 +37,10 @@ const invoiceSchema = new Schema({
         type: String,
         required : true
     },
+    year : {
+        type: Number,
+        required : true
+    },
     amount : {
         type: Number,
         required : true

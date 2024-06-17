@@ -176,6 +176,27 @@ const getRents = async(req,res) => {
     }
 }
 
+const geTenantRents = async(req,res) => {
+    try {
+        const tenant = req.query.tenantId
+        const rents = await Rent.find({tenant}).populate(["gateway","property","unit",{
+            path : "tenant",
+            populate : {
+                path : "user"
+            }
+        },{
+            path : "owner",
+            populate : {
+                path : "user"
+            }
+        }])
+        res.status(200).send(rents)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({error})
+    }
+}
+
 const deleteRent = async(req,res) => {
     try {
         const _id = req.query.id
@@ -190,5 +211,6 @@ const deleteRent = async(req,res) => {
 
 module.exports = {
     getRents,
-    deleteRent
+    deleteRent,
+    geTenantRents
 }
