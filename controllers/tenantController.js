@@ -78,6 +78,20 @@ const getOwnerTenants = async(req,res) => {
     }
   }
 
+const getTenant = async(req,res) => {
+    try {
+        const {_id} = req.query
+   
+            const tenant = await Tenant.findOne({user : _id}).populate(["property","unit","owner","user"])
+            res.status(200).send(tenant)
+        
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({error})
+    }
+  }
+
 const deleteTenant = async(req,res) => {
     try {
         const _id = req.query.id
@@ -97,5 +111,6 @@ module.exports = {
     getTenants,
     updateTenant,
     deleteTenant,
-    getOwnerTenants
+    getOwnerTenants,
+    getTenant
 }
