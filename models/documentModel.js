@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const Owner = require('./ownerModel')
 const Tenant = require("./tenantModel")
+const Maintainer = require("./maintainerModel")
 const DocumentSettings = require("./documentSettingsModel")
 
 const Schema = mongoose.Schema
@@ -8,7 +9,11 @@ const Schema = mongoose.Schema
 const documentSchema = new Schema({
     tenantName : {
         type : String,
-        required : true
+        required : false
+    },
+    maintainerName : {
+        type : String,
+        required : false
     },
     propertyName : {
         type : String,
@@ -37,7 +42,12 @@ const documentSchema = new Schema({
     tenant : {
         type: mongoose.Schema.Types.ObjectId,
         ref: Tenant,
-        required : true
+        required : false
+    },
+    maintainer : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Maintainer,
+        required : false
     },
     type : {
         type: mongoose.Schema.Types.ObjectId,

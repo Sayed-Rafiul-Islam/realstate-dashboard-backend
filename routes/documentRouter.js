@@ -1,9 +1,11 @@
-const { updateDocument, getOwnerDocument, getTenantDocument, deleteDocument, addDocument } = require('../controllers/documentController')
+const { updateDocument, getOwnerDocument, getTenantDocument, deleteDocument, updateOwnerDocument, addMaintainerDocument, addTenantDocument } = require('../controllers/documentController')
 
 const router = require('express').Router()
 
-router.post('/addDocument', addDocument)
+router.post('/addTenantDocument', addTenantDocument)
+router.post('/addMaintainerDocument', addMaintainerDocument)
 router.patch('/updateDocument', updateDocument )
+router.patch('/updateOwnerDocument', updateOwnerDocument )
 router.get('/getOwnerDocument', getOwnerDocument )
 router.get('/getTenantDocument', getTenantDocument )
 router.delete('/deleteDocument', deleteDocument )
