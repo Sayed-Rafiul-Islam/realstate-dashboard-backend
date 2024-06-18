@@ -21,7 +21,7 @@ const documentSchema = new Schema({
     },
     unitName : {
         type : String,
-        required : true
+        required : false
     },
     typeName : {
         type : String,

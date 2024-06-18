@@ -22,8 +22,8 @@ const addMaintainerDocument = async(req,res) => {
     try {
         const body = req.body
         const {title} = await DocumentSettings.findOne({_id : body.type})
-        const maintainer = await Maintainer.findOne({_id : body.maintainer}).populate(["property","unit"])
-        const data = {...body,typeName : title,propertyName : maintainer.property.name, unitName : maintainer.unit.name}
+        const maintainer = await Maintainer.findOne({_id : body.maintainer}).populate("property")
+        const data = {...body,typeName : title,propertyName : maintainer.property.name}
         const result = await Document.create(data)
         const newDocument = await Document.findOne({_id : result._id}).populate(["owner","tenant","type","maintainer"])
         res.status(200).send(newDocument)
@@ -82,6 +82,17 @@ const getTenantDocument = async(req,res) => {
     }
 }
 
+const getMaintainerDocument = async(req,res) => {
+    try {
+        const maintainer = req.query.maintainerId
+        const documents = await Document.find({maintainer}).populate(["owner","tenant","type","maintainer"])
+        res.status(200).send(documents)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({error})
+    }
+}
+
 const deleteDocument = async(req,res) => {
     try {
         const _id = req.query.id
@@ -101,5 +112,6 @@ module.exports = {
     getOwnerDocument,
     getTenantDocument,
     deleteDocument,
-    updateOwnerDocument
+    updateOwnerDocument,
+    getMaintainerDocument
 }
