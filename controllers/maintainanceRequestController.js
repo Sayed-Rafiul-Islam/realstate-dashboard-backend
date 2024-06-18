@@ -1,3 +1,4 @@
+const Expense = require('../models/expenseModel')
 const MaintainanceRequest = require('../models/maintainanceRequestModel')
 const Maintainer = require('../models/maintainerModel')
 const Notification = require('../models/notificaionModel')
@@ -36,9 +37,28 @@ const createRequest = async(req,res) => {
 const updateRequest = async(req,res) => {
     try {
         const {_id,...data} = req.body
-            await MaintainanceRequest.updateOne({_id}, data)
-            const updatedRequest = await MaintainanceRequest.findOne({_id}).populate(["property","unit","type","maintainer","owner"])
+        await MaintainanceRequest.updateOne({_id}, data)
+        const updatedRequest = await MaintainanceRequest.findOne({_id}).populate(["property","unit","type","maintainer","owner"])
 
+        if (updatedRequest.status === "Complete" && updatedRequest.paymentStatus === "Paid") {
+            const expense = {
+                name : "Maintainance",
+                propertyName : updatedRequest.propertyName,
+                unitName : updatedRequest.unitName,
+                maintainerName : updatedRequest.maintainer.name,
+                typeName : updatedRequest.type.type,
+                amount : updatedRequest.cost,
+                description : updatedRequest.details,
+                date : new Date(),
+
+                request : updatedRequest._id ,
+                property : updatedRequest.property._id ,
+                unit : updatedRequest.unit._id ,
+                owner : updatedRequest.owner._id ,
+                maintainer : updatedRequest.maintainer._id
+            }
+            await Expense.create(expense)
+        } 
         res.status(200).send(updatedRequest)
         
     } catch (error) {
