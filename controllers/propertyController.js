@@ -64,7 +64,7 @@ const getOwnerProperties = async(req,res) => {
             const property = await Property.findOne({_id})
             await Unit.deleteMany({property : _id})
             await Property.deleteOne({_id})
-            const owner = await Owner.findOne({_id : ownerId}).populate(["user","activePackage"])
+            // const owner = await Owner.findOne({_id : ownerId}).populate(["user","activePackage"])
             await Owner.updateOne({_id : ownerId},{$inc : {propertyCount : 1,unitCount :  property.unitCount}})
             const updatedOwner = await Owner.findOne({_id : ownerId}).populate(["user","activePackage"])
             res.status(200).json(updatedOwner)
