@@ -22,9 +22,25 @@ const ownerSchema = new Schema({
         type : Number,
         required : true
     },
+    maintainerCount : {
+        type : Number,
+        required : true,
+    },
+    invoiceCount : {
+        type : Number,
+        required : true
+    },
     activePackage : {
         type: mongoose.Schema.Types.ObjectId,
         ref: Package,
+        required : false
+    },
+    ownerPackage : {
+        type: String,
+        required : false
+    },
+    endDate : {
+        type: Date,
         required : false
     },
 })

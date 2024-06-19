@@ -15,7 +15,7 @@ const updateOwner = async(req,res) => {
     try {
         const {_id,...rest} = req.body
         await Owner.updateOne({_id}, rest)
-        const updatedOwner = await Owner.findOne({_id})
+        const updatedOwner = await Owner.findOne({_id}).populate(["user","activePackage"])
         res.status(200).send(updatedOwner)
         
     } catch (error) {
