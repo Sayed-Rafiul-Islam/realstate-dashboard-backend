@@ -26,10 +26,10 @@ const ownerSchema = new Schema({
         type : Number,
         required : true,
     },
-    invoiceCount : {
-        type : Number,
-        required : true
-    },
+    // invoiceCount : {
+    //     type : Number,
+    //     required : true
+    // },
     activePackage : {
         type: mongoose.Schema.Types.ObjectId,
         ref: Package,

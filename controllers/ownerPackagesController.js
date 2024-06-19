@@ -69,36 +69,38 @@ const deleteOwnerPackage = async(req,res) => {
 const activatePackage = async(req,res) => {
     try {
         const {_id,owner} = req.body
-        await OwnerPackage.updateMany({owner},{status : false})
-        await OwnerPackage.updateOne({_id},{status : true})
-        const activatedPackage = await OwnerPackage.findOne({_id}).populate([{
+        const isOwner = await Owner.findOne({_id : owner}).populate(["user","activePackage"])
+        const pack = await OwnerPackage.findOne({_id}).populate([{
             path : "owner",
             populate : {
                 path : "user"
             }
         },"pack"])
 
-        // owner update
-
-        await Owner.updateOne({_id : owner},{
-            activePackage : activatedPackage.pack._id,
-            endDate : activatedPackage.endDate,
-            ownerPackage : _id,
-            propertyCount : 0,
-            unitCount : 0,
-            invoiceCount : 0,
-            maintainerCount : 0
-        })
-        
-        const updatedOwner = await Owner.findOne({_id : owner}).populate(["user","activePackage"])
-        await Property.deleteMany({owner})
-        await Unit.deleteMany({owner})
-        await Maintainer.deleteMany({owner})
-        await Invoice.deleteMany({owner})
-        await Tenant.deleteMany({owner})
-
-
-        res.status(200).json({activatedPackage,updatedOwner})
+        if (isOwner.propertyCount > pack.pack.maxProperty || isOwner.unitCount > pack.pack.maxUnit || isOwner.maintainerCount > pack.pack.maxMaintainer) {
+            res.status(400).json()
+        } else {
+            await OwnerPackage.updateMany({owner},{status : false})
+            await OwnerPackage.updateOne({_id},{status : true})
+            const activatedPackage = await OwnerPackage.findOne({_id}).populate([{
+                path : "owner",
+                populate : {
+                    path : "user"
+                }
+            },"pack"])
+    
+            // owner update
+    
+            await Owner.updateOne({_id : owner},{
+                activePackage : activatedPackage.pack._id,
+                endDate : activatedPackage.endDate,
+                ownerPackage : _id,
+            })
+            
+            const updatedOwner = await Owner.findOne({_id : owner}).populate(["user","activePackage"]) 
+            res.status(200).json({activatedPackage,updatedOwner})
+        }
+       
 
     } catch (error) {
         console.log(error)

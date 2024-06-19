@@ -19,10 +19,10 @@ const packageSchema = new Schema({
         type : Number,
         required : true
     },
-    maxInvoice : {
-        type : Number,
-        required : true
-    },
+    // maxInvoice : {
+    //     type : Number,
+    //     required : true
+    // },
     monthlyPrice : {
         type : Number,
         required : true
