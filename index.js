@@ -46,6 +46,7 @@ const rentRouter = require('./routes/rentRouter')
 const expenseRouter = require('./routes/expenseRouter')
 const documentRouter = require('./routes/documentRouter')
 const documentSettingsRouter = require('./routes/documentSettingsRouter')
+const messageRouter = require('./routes/messageRouter')
 
 
 // Routes 
@@ -70,6 +71,7 @@ app.use('/api', rentRouter)
 app.use('/api', expenseRouter)  
 app.use('/api', documentRouter)  
 app.use('/api', documentSettingsRouter)  
+app.use('/api', messageRouter)  
 
 const mongoose = require('mongoose');
 

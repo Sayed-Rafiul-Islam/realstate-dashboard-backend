@@ -7,19 +7,27 @@ const packageSchema = new Schema({
         type : String,
         required : true
     },
-    monthlyPrice : {
-        type : Number,
-        required : true
-    },
-    yearlyPrice : {
-        type : Number,
-        required : false
-    },
     maxProperty : {
         type : Number,
         required : true
     },
     maxUnit : {
+        type : Number,
+        required : true
+    },
+    maxMaintainer : {
+        type : Number,
+        required : true
+    },
+    maxInvoice : {
+        type : Number,
+        required : true
+    },
+    monthlyPrice : {
+        type : Number,
+        required : true
+    },
+    yearlyPrice : {
         type : Number,
         required : true
     },

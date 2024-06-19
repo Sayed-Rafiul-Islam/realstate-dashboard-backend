@@ -15,22 +15,30 @@ const order = new Schema({
         ref: Package,
         required : true
     },
-    gateway : {
-        type: String,
-        required : true
-    },
-    date : {
-        type : Date,
-        required : true
-    },
-    transactionId : {
-        type : String,
+    monthly : {
+        type: Boolean,
         required : true
     },
     status : {
-        type : Boolean,
+        type : String,
         required : true
-    }
+    },
+    orderDate : {
+        type : Date,
+        required : true
+    },
+    dateOfPayment : {
+        type : Date,
+        required : false
+    },
+    gateway : {
+        type: String,
+        required : false
+    },
+    transactionId : {
+        type : String,
+        required : false
+    },
 })
 
 const Order = mongoose.model("Order", order)
