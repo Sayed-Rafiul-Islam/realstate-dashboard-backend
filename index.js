@@ -3,6 +3,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const compression = require('compression')
+const schedule = require('node-schedule')
 
 
 
@@ -73,7 +74,15 @@ app.use('/api', documentRouter)
 app.use('/api', documentSettingsRouter)  
 app.use('/api', messageRouter)  
 
+
+
 const mongoose = require('mongoose');
+const OwnerPackage = require('./models/ownerPackageModel');
+const Owner = require('./models/ownerModel');
+const Property = require('./models/propertyModel');
+const Unit = require('./models/unitModel');
+const Maintainer = require('./models/maintainerModel');
+const Tenant = require('./models/tenantModel');
 
 const uri = process.env.MONGO_URI;
 
@@ -89,8 +98,51 @@ const clientOptions = {
 mongoose.connect(uri, clientOptions)
 .then(()=> app.listen(port, () => {
     console.log(`Connected to Database and Listening to port ${port}`)
+    // schedule.scheduleJob('*/3 * * * * *', async () => {
+    //     const packs = await OwnerPackage.find()
+    //     console.log(new Date(new Date().toISOString().split("T")[0]))
+    //     console.log(new Date(packs[0].endDate.toISOString().split("T")[0]))
+    //     console.log(new Date(new Date().toISOString().split("T")[0]) < new Date(packs[0].endDate.toISOString().split("T")[0]))
+    //     packs.map((pack) => {
+    //         if(new Date('2024-07-08T17:20:58.618Z') >= pack.endDate ) {
+    //             console.log(pack,"delete")
+    //         }
+    //     })
+    // })
+
+    
+     // 18 = min
+    // 20 = hr
+    schedule.scheduleJob('5 0 0 * * * ', async () => {
+
+        const packs = await OwnerPackage.find()
+        packs.map(async (pack) => {            
+
+            if (new Date(new Date().toISOString().split("T")[0]) >= new Date(pack.endDate.toISOString().split("T")[0])) {
+                await OwnerPackage.deleteOne({_id : pack._id})
+                const owner = await Owner.findOne({_id : pack.owner})
+                const isPack = await OwnerPackage.findOne({_id : owner.ownerPackage})
+                if (!isPack) {
+                    await Property.deleteMany({owner : owner._id})
+                    await Unit.deleteMany({owner : owner._id})
+                    await Maintainer.deleteMany({owner : owner._id})
+                    await Tenant.deleteMany({owner : owner._id})
+                    await Owner.updateOne({_id : owner._id},{
+                        propertyCount : 0,
+                        unitCount : 0,
+                        maintainerCount : 0,
+                        activePackage : null
+                    })
+                }
+                
+            }
+          
+        })
+    })
 }))
 .catch((err)=> console.log(err))
+
+
 
 app.use('/', (req, res, next) => {
     res.send('running...')

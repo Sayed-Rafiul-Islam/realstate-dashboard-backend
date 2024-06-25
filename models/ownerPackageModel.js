@@ -33,6 +33,8 @@ const ownerPackageSchema = new Schema({
     }
 })
 
+// ownerPackageSchema.path("endDate").index({expire})
+
 const OwnerPackage = mongoose.model("OwnerPackage", ownerPackageSchema)
 
 module.exports = OwnerPackage
