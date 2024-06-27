@@ -48,7 +48,12 @@ const updateTenant = async(req,res) => {
 
             const update = {...data,user : user._id}
             await Tenant.updateOne({_id},update)
-            const updatedTenant = await Tenant.findOne({_id}).populate(["property","unit","owner","user"])
+            const updatedTenant = await Tenant.findOne({_id}).populate(["property","unit","user",{
+                path : "owner",
+                populate : {
+                    path : "user"
+                }
+            }])
             res.status(200).send(updatedTenant)
         
     } catch (error) {
@@ -59,7 +64,12 @@ const updateTenant = async(req,res) => {
 
 const getTenants = async(req,res) => {
     try {
-        const tenants = await Tenant.find().populate(["property","unit","owner","user"])
+        const tenants = await Tenant.find().populate(["property","unit","user",{
+            path : "owner",
+            populate : {
+                path : "user"
+            }
+        }])
         res.status(200).send(tenants)
     } catch (error) {
         console.log(error)
@@ -70,7 +80,12 @@ const getTenants = async(req,res) => {
 const getOwnerTenants = async(req,res) => {
     try {
         const owner = req.query.id
-        const tenants = await Tenant.find({owner}).populate(["property","unit","owner","user"])
+        const tenants = await Tenant.find({owner}).populate(["property","unit","user",{
+            path : "owner",
+            populate : {
+                path : "user"
+            }
+        }])
         res.status(200).send(tenants)
     } catch (error) {
         console.log(error)
@@ -82,7 +97,12 @@ const getTenant = async(req,res) => {
     try {
         const {_id} = req.query
    
-            const tenant = await Tenant.findOne({user : _id}).populate(["property","unit","owner","user"])
+            const tenant = await Tenant.findOne({user : _id}).populate(["property","unit","user",{
+                path : "owner",
+                populate : {
+                    path : "user"
+                }
+            }])
             res.status(200).send(tenant)
         
         

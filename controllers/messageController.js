@@ -4,7 +4,7 @@ const Notification = require('../models/notificaionModel')
 const Owner = require('../models/ownerModel')
 const Tenant = require('../models/tenantModel')
 
-
+// for owners-----------------------------
 const createMessage = async(req,res) => {
     try {
         const {all,...data} = req.body
@@ -50,6 +50,8 @@ const createMessage = async(req,res) => {
     }
 }
 
+
+// for admin---------------------------------
 const createAdminMessage = async (req,res) => {
     try {
         const {all,...data} = req.body
@@ -80,6 +82,7 @@ const createAdminMessage = async (req,res) => {
 
 }
 
+// for all ------------------------------------
 const viewMessage = async(req,res) => {
     try {
         const {_id} = req.body
@@ -92,20 +95,6 @@ const viewMessage = async(req,res) => {
         res.status(500).send({error})
     }
 }
-// const updateMessage = async(req,res) => {
-//     try {
-//         const {_id,...rest} = req.body
-//         await Message.updateOne({_id}, rest)
-//         const updatedType = await Message.findOne({_id}).populate("owner")
-
-//         res.status(200).send(updatedType)
-        
-//     } catch (error) {
-//         console.log(error)
-//         res.status(500).send({error})
-//     }
-// }
-
 
 const getMessages = async(req,res) => {
     try {
@@ -129,28 +118,6 @@ const getSentMessages = async(req,res) => {
     }
 }
 
-const getTenantMessage = async(req,res) => {
-    try {
-        const owner = req.query.ownerId
-        const types = await Message.find({owner}).populate("user")
-        res.status(200).send(types)
-    } catch (error) {
-        console.log(error)
-        res.status(500).send({error})
-    }
-}
-
-const getMaintainerMessage = async(req,res) => {
-    try {
-        const owner = req.query.ownerId
-        const types = await Message.find({owner}).populate("owner")
-        res.status(200).send(types)
-    } catch (error) {
-        console.log(error)
-        res.status(500).send({error})
-    }
-}
-
 const deleteMessage = async(req,res) => {
     try {
         const _id = req.query.id
@@ -165,8 +132,6 @@ const deleteMessage = async(req,res) => {
 
 module.exports = {
     createMessage,
-    getTenantMessage,
-    getMaintainerMessage,
     getMessages,
     getSentMessages,
     deleteMessage,

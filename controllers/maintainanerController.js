@@ -20,7 +20,12 @@ const createMaintainer = async(req,res) => {
 
             const maintainer = {...data,user : user._id}
             const result = await Maintainer.create(maintainer)
-            const newMaintainer = await Maintainer.findOne({_id : result._id}).populate(["type","owner","user","property"])
+            const newMaintainer = await Maintainer.findOne({_id : result._id}).populate(["type","user","property",{
+                path : "owner",
+                populate : {
+                    path : "user"
+                }
+            }])
             res.status(200).send(newMaintainer)
         } else {
             res.status(400).send({message : "Email already in use"})
@@ -35,7 +40,12 @@ const updateMaintainer = async(req,res) => {
     try {
         const {_id,...update} = req.body
         await Maintainer.updateOne({_id}, update)
-        const updatedMaintainer = await MaintainanceType.findOne({_id}).populate(["type","owner","user","property"])
+        const updatedMaintainer = await MaintainanceType.findOne({_id}).populate(["type","user","property",{
+            path : "owner",
+            populate : {
+                path : "user"
+            }
+        }])
         res.status(200).send(updatedMaintainer)
         
     } catch (error) {
@@ -47,7 +57,12 @@ const updateMaintainer = async(req,res) => {
 const getOwnerMaintainers = async(req,res) => {
     try {
         const owner = req.query.id
-        const maintainers = await Maintainer.find({owner}).populate(["owner","user","type","property"])
+        const maintainers = await Maintainer.find({owner}).populate(["user","type","property",{
+            path : "owner",
+            populate : {
+                path : "user"
+            }
+        }])
         res.status(200).send(maintainers)
     } catch (error) {
         console.log(error)
@@ -57,7 +72,12 @@ const getOwnerMaintainers = async(req,res) => {
 
 const getMaintainers = async(req,res) => {
     try {
-        const maintainers = await Maintainer.find().populate(["owner","user","type","property"])
+        const maintainers = await Maintainer.find().populate(["user","type","property",{
+            path : "owner",
+            populate : {
+                path : "user"
+            }
+        }])
         res.status(200).send(maintainers)
     } catch (error) {
         console.log(error)
